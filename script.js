@@ -6,7 +6,6 @@ exec('git log', (err, stdout, stderr) => {
       return;
     }
 
-    // splits log into array of commits
     const logArray = stdout.split("commit ")
 
     const authorMessageArray = logArray.map( logEntry => {
