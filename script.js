@@ -10,12 +10,9 @@ exec('git log', (err, stdout, stderr) => {
     const logArray = stdout.split("commit ")
 
     const authorMessageArray = logArray.map( logEntry => {
-
       let author = ''
       let message = ''
-
       const logEntryArray = logEntry.split("\n")
-
       if(logEntryArray[1]){
         if(logEntryArray[1].startsWith("Author: ")){
           author = logEntryArray[1].substr(8).split(" <")[0]
@@ -27,8 +24,32 @@ exec('git log', (err, stdout, stderr) => {
       }
       return [author, message]
     })
+
+    const shortLogObject = {}
+
+    const stringy = ''
     
-    console.log(authorMessageArray)
+    for(i = 0; i < authorMessageArray.length; i++){
+      if(!shortLogObject[authorMessageArray[i][0]]){
+        shortLogObject[authorMessageArray[i][0]] = {
+          name:  authorMessageArray[i][0],
+          count: 1,
+          message: authorMessageArray[i][1]
+        }
+      } else if(shortLogObject[authorMessageArray[i][0]]){
+        shortLogObject[authorMessageArray[i][0]].count ++
+        shortLogObject[authorMessageArray[i][0]].message = shortLogObject[authorMessageArray[i][0]].message.concat('\n').concat(authorMessageArray[i][1])
+      }
+    }
+   
+    for (const entry in shortLogObject) {
+      if (shortLogObject.hasOwnProperty(entry)) {
+        const element = shortLogObject[entry];
+        console.log(`${element.name} (${element.count})`)
+        console.log(element.message)
+        console.log('\n')
+      }
+    }
 
   });
 
