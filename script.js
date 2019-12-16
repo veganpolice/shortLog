@@ -5,30 +5,31 @@ exec('git log', (err, stdout, stderr) => {
       console.log('Error executing the command')
       return;
     }
-    logArray = stdout.split("commit ")
-    authorMessageArray = logArray.map( logEntry => {
 
-      let author = logEntry.split("\n")[1]
-      let message = logEntry.split("\n")[4]
+    // splits log into array of commits
+    const logArray = stdout.split("commit ")
 
-      let test = 'string'
-      test.sub
-      // author.indexOf('<')
+    const authorMessageArray = logArray.map( logEntry => {
 
-      if (author && message){
-        if (author.startsWith('Author: ')){
-          author = author.substr(8)
+      let author = ''
+      let message = ''
+
+      const logEntryArray = logEntry.split("\n")
+
+      if(logEntryArray[1]){
+        if(logEntryArray[1].startsWith("Author: ")){
+          author = logEntryArray[1].substr(8).split(" <")[0]
+          message = logEntryArray[4]
+        } else if (logEntryArray[2].startsWith("Author: ")){
+          author = logEntryArray[2].substr(8).split(" <")[0]
+          message = logEntryArray[5]
         }
       }
-     
-      //author.trim()
-      //message.trim()
       return [author, message]
     })
     
-    // output
-    console.log(authorMessageArray[1]);
-    //console.log(`stderr: ${stdout}`);
+    console.log(authorMessageArray)
+
   });
 
 //Adam Roben (2):
